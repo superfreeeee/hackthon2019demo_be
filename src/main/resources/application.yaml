@@ -1,0 +1,12 @@
+spring:
+  spring:
+    datasource:
+      url: jdbc:mysql://localhost:3306/hackthon?useUnicode=true&characterEncoding=UTF-8
+#      url: jdbc:mysql://[address:port]/[database_name]?[options]
+      username: root
+      password: 1234567890
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+    mapper-locations: classpath:mybatis/*.xml
+    type-aliases-package: cn.superfree.be_demo.entity
