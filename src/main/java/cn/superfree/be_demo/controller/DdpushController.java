@@ -43,18 +43,28 @@ public class DdpushController {
         return Response.ok("refresh success", result);
     }
 
+    @PostMapping("/bind")
+    public Response bind(@RequestBody DeviceForm deviceForm) {
+        boolean registerResult = ddpushService.bindReceiver(deviceForm);
+        if (registerResult) {
+            return Response.error("bind fail");
+        }
+        return Response.ok("bind success", null);
+    }
+
     @PostMapping("/register")
     public Response register(@RequestBody DeviceForm deviceForm) {
-        boolean registerResult = ddpushService.register(deviceForm);
+        boolean registerResult = ddpushService.registerDevice(deviceForm);
         if (registerResult) {
             return Response.error("register fail");
         }
         return Response.ok("register success", null);
     }
 
+
     @GetMapping("/push")
     public Response push() {
-        ddpushService.push();
+        ddpushService.push("chu", "hahaha");
         return Response.ok("push message", null);
     }
 }

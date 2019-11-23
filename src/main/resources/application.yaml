@@ -10,3 +10,5 @@ spring:
 mybatis:
     mapper-locations: classpath:mybatis/*.xml
     type-aliases-package: cn.superfree.be_demo.entity
+server:
+  port: 8999

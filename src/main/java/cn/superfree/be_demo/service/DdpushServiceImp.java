@@ -1,6 +1,7 @@
 package cn.superfree.be_demo.service;
 
 import cn.superfree.be_demo.constant.form.DeviceForm;
+import cn.superfree.be_demo.constant.pojo.DeviceDO;
 import cn.superfree.be_demo.util.Utils;
 import org.ddpush.im.v1.client.appserver.Pusher;
 import org.ddpush.im.v1.client.appuser.Message;
@@ -17,7 +18,11 @@ public class DdpushServiceImp implements DdpushService {
 
     private Pusher pusher = null;
 
+    private List<DeviceDO> devices = new ArrayList<>();
+
     private List<Record> records = new ArrayList<>();
+
+    private DeviceDO receiver;
 
     public DdpushServiceImp() {
         connect();
@@ -27,10 +32,13 @@ public class DdpushServiceImp implements DdpushService {
 
         long timestamp;
 
+        String deviceId;
+
         byte[] data;
 
-        Record(byte[] data) {
+        Record(byte[] data, String deviceId) {
             this.timestamp = System.currentTimeMillis();
+            this.deviceId = deviceId;
             this.data = data;
         }
 
@@ -78,7 +86,8 @@ public class DdpushServiceImp implements DdpushService {
                     System.out.println("get message from others");
                 }
 
-                Record record = new Record(message.getData());
+//                data[0] 存储设备ID
+                Record record = new Record(data, String.valueOf(data[0]));
                 records.add(record);
                 System.out.println(record);
             } else {
@@ -132,15 +141,33 @@ public class DdpushServiceImp implements DdpushService {
     }
 
     @Override
-    public boolean register(DeviceForm deviceForm) {
-
-        return false;
+    public boolean registerDevice(DeviceForm deviceForm) {
+        try {
+            DeviceDO deviceDO = new DeviceDO(deviceForm);
+            devices.add(deviceDO);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public boolean push(String deviceName, String message) {
+    public boolean bindReceiver(DeviceForm deviceForm) {
         try {
-            pusher.push0x20Message(Utils.md5Byte(deviceName), message.getBytes());
+            DeviceDO deviceDO = new DeviceDO(deviceForm);
+            receiver = deviceDO;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean push(String deviceId, String message) {
+        try {
+            pusher.push0x20Message(Utils.md5Byte(deviceId), message.getBytes());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

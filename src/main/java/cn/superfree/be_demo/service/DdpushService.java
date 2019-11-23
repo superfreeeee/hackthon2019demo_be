@@ -8,7 +8,9 @@ public interface DdpushService {
 
     List<?> refresh(String username);
 
-    boolean register(DeviceForm deviceForm);
+    boolean registerDevice(DeviceForm deviceForm);
 
-    boolean push(String deviceName, String message);
+    boolean bindReceiver(DeviceForm deviceForm);
+
+    boolean push(String deviceId, String message);
 }
