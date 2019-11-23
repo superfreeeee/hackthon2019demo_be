@@ -10,5 +10,5 @@ public interface DdpushService {
 
     boolean register(DeviceForm deviceForm);
 
-    
+    boolean push(String deviceName, String message);
 }

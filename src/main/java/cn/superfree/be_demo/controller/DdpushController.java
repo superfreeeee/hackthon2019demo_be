@@ -51,4 +51,10 @@ public class DdpushController {
         }
         return Response.ok("register success", null);
     }
+
+    @GetMapping("/push")
+    public Response push() {
+        ddpushService.push();
+        return Response.ok("push message", null);
+    }
 }
