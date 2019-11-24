@@ -33,6 +33,8 @@ public class DdpushController {
         } else {
             UserVO userVO = new UserVO();
             userVO.setUsername(loginForm.getUsername());
+            userVO.setReceiver(ddpushService.getReceiver());
+
             return Response.ok("login success", userVO);
         }
     }

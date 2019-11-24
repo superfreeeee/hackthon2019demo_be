@@ -1,35 +1,16 @@
 package cn.superfree.be_demo.constant.pojo;
 
-public class UserVO {
-    private static int counter = 0;
+import lombok.Data;
 
-    private final int id;
+import java.util.List;
+
+@Data
+public class UserVO {
 
     private String username;
 
-    private String serverId;
+    private DeviceDO receiver;
 
-    public UserVO() {
-        id = ++counter;
-    }
+    private List<DeviceDO> devices;
 
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getServerId() {
-        return serverId;
-    }
-
-    public void setServerId(String serverId) {
-        this.serverId = serverId;
-    }
 }

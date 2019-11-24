@@ -3,6 +3,7 @@ package cn.superfree.be_demo.service;
 import cn.superfree.be_demo.constant.form.DeviceForm;
 import cn.superfree.be_demo.constant.pojo.DeviceDO;
 import cn.superfree.be_demo.util.Utils;
+import lombok.Getter;
 import org.ddpush.im.v1.client.appserver.Pusher;
 import org.ddpush.im.v1.client.appuser.Message;
 import org.ddpush.im.v1.client.appuser.UDPClientBase;
@@ -134,10 +135,7 @@ public class DdpushServiceImp implements DdpushService {
 
     @Override
     public List<?> refresh(String username) {
-        if(pusher == null) {
-            connect();
-        }
-        return null;
+        return devices;
     }
 
     @Override
@@ -173,5 +171,15 @@ public class DdpushServiceImp implements DdpushService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public DeviceDO getReceiver() {
+        return receiver;
+    }
+
+    @Override
+    public List<?> getDevices() {
+        return devices;
     }
 }
