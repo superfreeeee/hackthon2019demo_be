@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DdpushService {
 
-    List<?> refresh(String username);
+    List<?> refresh();
 
     boolean registerDevice(DeviceForm deviceForm);
 

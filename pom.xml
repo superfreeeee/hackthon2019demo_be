@@ -46,6 +46,7 @@
         <dependency>
             <groupId>ddpush</groupId>
             <artifactId>ddpush</artifactId>
+            <version>1.0.03</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/lib/ddpush-1.0.03.jar</systemPath>
         </dependency>

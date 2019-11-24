@@ -3,6 +3,7 @@ package cn.superfree.be_demo.service;
 import cn.superfree.be_demo.constant.form.DeviceForm;
 import cn.superfree.be_demo.constant.pojo.DeviceDO;
 import cn.superfree.be_demo.util.Utils;
+import lombok.Data;
 import lombok.Getter;
 import org.ddpush.im.v1.client.appserver.Pusher;
 import org.ddpush.im.v1.client.appuser.Message;
@@ -29,15 +30,16 @@ public class DdpushServiceImp implements DdpushService {
         connect();
     }
 
+    @Data
     private final class Record {
 
         long timestamp;
 
         String deviceId;
 
-        byte[] data;
+        String data;
 
-        Record(byte[] data, String deviceId) {
+        Record(String data, String deviceId) {
             this.timestamp = System.currentTimeMillis();
             this.deviceId = deviceId;
             this.data = data;
@@ -45,7 +47,7 @@ public class DdpushServiceImp implements DdpushService {
 
         @Override
         public String toString() {
-            return "{timestamp: " + timestamp + ", data: " + Arrays.toString(data) + "}";
+            return "{timestamp: " + timestamp + ", data: " + data + "}";
         }
     }
 
@@ -88,13 +90,34 @@ public class DdpushServiceImp implements DdpushService {
                 }
 
 //                data[0] 存储设备ID
-                Record record = new Record(data, String.valueOf(data[0]));
+                String[] r = parse(data);
+                Record record = new Record(r[1], r[0]);
+                System.out.println("deviceID: " + r[0]);
+                System.out.println("message: " + r[1]);
                 records.add(record);
                 System.out.println(record);
             } else {
                 System.out.println("unknown cmd");
             }
         }
+    }
+
+    public static String[] parse(byte[] src) {
+        StringBuilder nameBuilder = new StringBuilder();
+        StringBuilder infoBuilder = new StringBuilder();
+        int idx = 5;
+        while (src[idx] != ',') {
+            nameBuilder.append((char) src[idx]);
+            idx++;
+        }
+        idx++;
+
+        while (idx < src.length) {
+            infoBuilder.append((char) src[idx]);
+            idx++;
+        }
+
+        return new String[]{nameBuilder.toString(), infoBuilder.toString()};
     }
 
 
@@ -134,8 +157,18 @@ public class DdpushServiceImp implements DdpushService {
     }
 
     @Override
-    public List<?> refresh(String username) {
-        return devices;
+    public List<?> refresh() {
+        List result = new ArrayList();
+        for(DeviceDO deviceDO : devices) {
+            for(Record record : records) {
+                if(deviceDO.getDeviceId().equals(record.deviceId)) {
+                    result.add(record);
+                }
+            }
+        }
+        System.out.println(records);
+        System.out.println(result);
+        return result;
     }
 
     @Override
@@ -143,6 +176,7 @@ public class DdpushServiceImp implements DdpushService {
         try {
             DeviceDO deviceDO = new DeviceDO(deviceForm);
             devices.add(deviceDO);
+            System.out.println("deviceID: " + deviceDO.getDeviceId());
             return true;
         } catch (Exception e) {
             e.printStackTrace();

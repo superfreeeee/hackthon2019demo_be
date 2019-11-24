@@ -3,6 +3,7 @@ package cn.superfree.be_demo.controller;
 import cn.superfree.be_demo.constant.form.DeviceForm;
 import cn.superfree.be_demo.constant.form.LoginForm;
 import cn.superfree.be_demo.constant.Response;
+import cn.superfree.be_demo.constant.pojo.DeviceDO;
 import cn.superfree.be_demo.constant.pojo.UserVO;
 import cn.superfree.be_demo.service.DdpushService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,8 @@ public class DdpushController {
     }
 
     @GetMapping("/refresh")
-    public Response refresh(@RequestParam(required = true) String username) {
-        List<?> result = ddpushService.refresh(username);
+    public Response refresh() {
+        List<?> result = ddpushService.refresh();
         return Response.ok("refresh success", result);
     }
 
@@ -68,5 +69,16 @@ public class DdpushController {
     public Response push() {
         ddpushService.push("chu", "hahaha");
         return Response.ok("push message", null);
+    }
+
+    @GetMapping("/receiver")
+    public Response receiver() {
+        DeviceDO deviceDO = ddpushService.getReceiver();
+        return Response.ok("receiver got", deviceDO);
+    }
+    @GetMapping("/devices")
+    public Response devices() {
+        List<?> deviceDOS = ddpushService.getDevices();
+        return Response.ok("devices got", deviceDOS);
     }
 }
